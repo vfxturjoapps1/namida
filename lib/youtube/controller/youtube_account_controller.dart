@@ -76,12 +76,15 @@ class YoutubeAccountController {
   }
 
   static bool operationBlockedByMembership(YoutiPieOperation operation, MembershipType? ms) {
-    final needsMembership = _operationNeedsMembership[operation] ?? true;
-    if (needsMembership) {
-      if (ms == null || ms.index < MembershipType.cutie.index) {
-        return true;
-      }
-    }
+    // final needsMembership = _operationNeedsMembership[operation] ?? true;
+    // if (needsMembership) {
+    //   if (ms == null || ms.index < MembershipType.cutie.index) {
+    //     return true;
+    //   }
+    // }
+
+    // MOD EDIT (Always return false)
+
     return false;
   }
 
@@ -199,44 +202,49 @@ class YoutubeAccountController {
   }
 
   static bool _checkCanSignIn() {
-    final userMembershipType = membership.userMembershipTypeGlobal.value ?? MembershipType.unknown;
+    // final userMembershipType = membership.userMembershipTypeGlobal.value ?? MembershipType.unknown;
 
-    if (userMembershipType == MembershipType.owner) {
-      if (current.canAddMultiAccounts != true) {
-        _showInfo('‧₊˚❀༉‧₊˚ welcome boss ‧₊˚❀༉‧₊˚');
-        current.canAddMultiAccounts = true;
-      }
-      return true;
-    }
+    // if (userMembershipType == MembershipType.owner) {
+    //   if (current.canAddMultiAccounts != true) {
+    //     _showInfo('‧₊˚❀༉‧₊˚ welcome boss ‧₊˚❀༉‧₊˚');
+    //     current.canAddMultiAccounts = true;
+    //   }
+    //   return true;
+    // }
 
-    bool canSignIn = false;
-    final accounts = current.signedInAccounts.value;
-    if (accounts.isNotEmpty) {
-      if (userMembershipType == MembershipType.pookie || userMembershipType == MembershipType.patootie) {
-        canSignIn = true;
-        current.canAddMultiAccounts = true;
-      } else {
-        _showError(
-          '${lang.membershipYouNeedMembershipOfToAddMultipleAccounts(name1: '`${MembershipType.pookie.name}`', name2: '`${MembershipType.patootie.name}`')}. ${lang.yourCurrentMembershipIs(name: "`${userMembershipType.name}`")}',
-          manageSubscriptionButton: true,
-        );
-      }
-    } else {
-      canSignIn = true;
-      current.canAddMultiAccounts = false;
+    // bool canSignIn = false;
+    // final accounts = current.signedInAccounts.value;
+    // if (accounts.isNotEmpty) {
+    //   if (userMembershipType == MembershipType.pookie || userMembershipType == MembershipType.patootie) {
+    //     canSignIn = true;
+    //     current.canAddMultiAccounts = true;
+    //   } else {
+    //     _showError(
+    //       '${lang.membershipYouNeedMembershipOfToAddMultipleAccounts(name1: '`${MembershipType.pookie.name}`', name2: '`${MembershipType.patootie.name}`')}. ${lang.yourCurrentMembershipIs(name: "`${userMembershipType.name}`")}',
+    //       manageSubscriptionButton: true,
+    //     );
+    //   }
+    // } else {
+    //   canSignIn = true;
+    //   current.canAddMultiAccounts = false;
 
-      // -- this was if we didnt allow sign in before membership
-      // if (userMembershipType == MembershipType.cutie) {
-      //   canSignIn = true;
-      //   current.canAddMultiAccounts = false;
-      // } else {
-      // _showError(
-      //   "${lang.yourCurrentMembershipIs("`${userMembershipType.name}`")}",
-      //   manageSubscriptionButton: true,
-      // );
-      // }
-    }
-    return canSignIn;
+    //   // -- this was if we didnt allow sign in before membership
+    //   // if (userMembershipType == MembershipType.cutie) {
+    //   //   canSignIn = true;
+    //   //   current.canAddMultiAccounts = false;
+    //   // } else {
+    //   // _showError(
+    //   //   "${lang.yourCurrentMembershipIs("`${userMembershipType.name}`")}",
+    //   //   manageSubscriptionButton: true,
+    //   // );
+    //   // }
+    // }
+    // return canSignIn;
+
+    // MOD EDIT  (replaced entire content)
+
+    current.canAddMultiAccounts = true;
+    return true;
   }
 
   static Future<ChannelInfoItem?> _youtubeSignInButton({
@@ -329,7 +337,10 @@ class _CurrentMembership {
   final userSupabaseSub = Rxn<SupabaseSub>();
   final userPatreonTier = Rxn<SupportTier>();
 
-  final userMembershipTypeGlobal = Rxn<MembershipType>();
+  // final userMembershipTypeGlobal = Rxn<MembershipType>();
+  // MOD EDIT (owner type membership)
+  final userMembershipTypeGlobal = Rxn<MembershipType>(MembershipType.owner);
+
   final userMembershipTypeSupabase = Rxn<MembershipType>();
   final userMembershipTypePatreon = Rxn<MembershipType>();
 
