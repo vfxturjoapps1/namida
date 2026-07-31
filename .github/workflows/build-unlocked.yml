@@ -1,7 +1,9 @@
 name: Compile Unlocked Namida
 
 on:
-  workflow_dispatch: 
+  push:
+    branches: [ "myModv1" ]
+  workflow_dispatch:
 
 jobs:
   build:
