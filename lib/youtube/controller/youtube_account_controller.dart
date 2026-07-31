@@ -3,10 +3,19 @@
 import 'dart:async';
 
 import 'package:namico_login_manager/namico_login_manager.dart';
-import 'package:namico_subscription_manager/class/supabase_sub.dart';
-import 'package:namico_subscription_manager/class/support_tier.dart';
-import 'package:namico_subscription_manager/core/enum.dart';
-import 'package:namico_subscription_manager/namico_subscription_manager.dart';
+
+// MOD EDIT (Removing imports)
+// import 'package:namico_subscription_manager/class/supabase_sub.dart';
+// import 'package:namico_subscription_manager/class/support_tier.dart';
+// import 'package:namico_subscription_manager/core/enum.dart';
+// import 'package:namico_subscription_manager/namico_subscription_manager.dart';
+
+// MOD EDIT (Adding stubs)
+enum MembershipType { unknown, cutie, pookie, patootie, owner }
+enum SignInDecision { dummy }
+class SupabaseSub { final String? name = "Owner"; }
+class SupportTier { final String? userName = "Owner"; }
+
 import 'package:youtipie/class/youtipie_feed/channel_info_item.dart';
 import 'package:youtipie/core/enum.dart';
 import 'package:youtipie/managers/acount_manager.dart';
@@ -96,12 +105,12 @@ class YoutubeAccountController {
   static Future<void> initialize() async {
     current.canAddMultiAccounts = false;
 
-    NamicoSubscriptionManager.initialize(dataDirectory: AppDirs.YOUTIPIE_DATA);
+    // NamicoSubscriptionManager.initialize(dataDirectory: AppDirs.YOUTIPIE_DATA);
 
-    NamicoSubscriptionManager.onError = (message, e, st) {
-      _showError(message, exception: e, manageSubscriptionButton: true, messageAsTitle: true);
-      logger.error(message, e: e, st: st);
-    };
+    // NamicoSubscriptionManager.onError = (message, e, st) {
+    //   _showError(message, exception: e, manageSubscriptionButton: true, messageAsTitle: true);
+    //   logger.error(message, e: e, st: st);
+    // };
 
     YoutiPie.canExecuteOperation = (operation) {
       if (operation.requiresAccount) {
@@ -142,37 +151,37 @@ class YoutubeAccountController {
   }
 
   static Future<void> fetchAccSupportDetails() async {
-    await Future.wait([
-      () async {
-        final patreonSupportTier = await NamicoSubscriptionManager.patreon.getUserSupportTierInCacheValid();
-        if (patreonSupportTier != null) {
-          final ms = patreonSupportTier.toMembershipType();
-          membership.userPatreonTier.value = patreonSupportTier;
-          membership.userMembershipTypePatreon.value = ms;
-          membership._updateGlobal(ms);
-        } else {
-          _pendingRequests['patreon'] = () async => await membership.checkPatreon(showError: false);
-        }
-      }(),
-      () async {
-        final supasub = await NamicoSubscriptionManager.supabase.getUserSubValidCache();
-        if (supasub != null) {
-          final ms = supasub.toMembershipType();
-          membership.userSupabaseSub.value = supasub;
-          membership.userMembershipTypeSupabase.value = ms;
-          membership._updateGlobal(ms);
-        } else {
-          final info = await NamicoSubscriptionManager.supabase.getUserSubInCache();
-          if (info != null) {
-            final uuid = info.uuid;
-            final email = info.email;
-            if (uuid != null && email != null) {
-              _pendingRequests['supabase'] = () async => await membership.checkSupabase(uuid, email);
-            }
-          }
-        }
-      }(),
-    ]);
+    // await Future.wait([
+    //   () async {
+    //     final patreonSupportTier = await NamicoSubscriptionManager.patreon.getUserSupportTierInCacheValid();
+    //     if (patreonSupportTier != null) {
+    //       final ms = patreonSupportTier.toMembershipType();
+    //       membership.userPatreonTier.value = patreonSupportTier;
+    //       membership.userMembershipTypePatreon.value = ms;
+    //       membership._updateGlobal(ms);
+    //     } else {
+    //       _pendingRequests['patreon'] = () async => await membership.checkPatreon(showError: false);
+    //     }
+    //   }(),
+    //   () async {
+    //     final supasub = await NamicoSubscriptionManager.supabase.getUserSubValidCache();
+    //     if (supasub != null) {
+    //       final ms = supasub.toMembershipType();
+    //       membership.userSupabaseSub.value = supasub;
+    //       membership.userMembershipTypeSupabase.value = ms;
+    //       membership._updateGlobal(ms);
+    //     } else {
+    //       final info = await NamicoSubscriptionManager.supabase.getUserSubInCache();
+    //       if (info != null) {
+    //         final uuid = info.uuid;
+    //         final email = info.email;
+    //         if (uuid != null && email != null) {
+    //           _pendingRequests['supabase'] = () async => await membership.checkSupabase(uuid, email);
+    //         }
+    //       }
+    //     }
+    //   }(),
+    // ]);
 
     _executePendingRequests();
   }
@@ -354,74 +363,74 @@ class _CurrentMembership {
   }
 
   Future<void> claimPatreon({required LoginPageConfiguration pageConfig, required SignInDecision signIn}) async {
-    redirectUrlCompleter?.completeIfWasnt();
-    redirectUrlCompleter = Completer<String?>();
-    final tier = await NamicoSubscriptionManager.patreon.getUserSupportTier(
-      redirectUrlCompleter: redirectUrlCompleter,
-      pageConfig: pageConfig,
-      signIn: signIn,
-    );
-    redirectUrlCompleter = null;
+    // redirectUrlCompleter?.completeIfWasnt();
+    // redirectUrlCompleter = Completer<String?>();
+    // final tier = await NamicoSubscriptionManager.patreon.getUserSupportTier(
+    //   redirectUrlCompleter: redirectUrlCompleter,
+    //   pageConfig: pageConfig,
+    //   signIn: signIn,
+    // );
+    // redirectUrlCompleter = null;
 
-    if (tier == null) {
-      YoutubeAccountController._showError(lang.failed);
-      return;
-    }
+    // if (tier == null) {
+    //   YoutubeAccountController._showError(lang.failed);
+    //   return;
+    // }
 
-    if (tier.ammountUSD == null) {
-      YoutubeAccountController._showError(lang.membershipNoSubscriptionsFoundForUser);
-      // -- do not return, assign info
-    }
+    // if (tier.ammountUSD == null) {
+    //   YoutubeAccountController._showError(lang.membershipNoSubscriptionsFoundForUser);
+    //   // -- do not return, assign info
+    // }
 
-    userPatreonTier.value = tier;
-    final ms = tier.toMembershipType();
-    userMembershipTypePatreon.value = ms;
-    _updateGlobal(ms);
+    // userPatreonTier.value = tier;
+    // final ms = tier.toMembershipType();
+    // userMembershipTypePatreon.value = ms;
+    // _updateGlobal(ms);
   }
 
   Future<void> checkPatreon({bool showError = true}) async {
-    final tier = await NamicoSubscriptionManager.patreon.getUserSupportTierWithoutLogin();
-    if (tier == null) {
-      if (showError) YoutubeAccountController._showError(lang.membershipNoSubscriptionsFoundForUser);
-      return;
-    }
-    userPatreonTier.value = tier;
-    final ms = tier.toMembershipType();
-    userMembershipTypePatreon.value = ms;
-    _updateGlobal(ms);
+    // final tier = await NamicoSubscriptionManager.patreon.getUserSupportTierWithoutLogin();
+    // if (tier == null) {
+    //   if (showError) YoutubeAccountController._showError(lang.membershipNoSubscriptionsFoundForUser);
+    //   return;
+    // }
+    // userPatreonTier.value = tier;
+    // final ms = tier.toMembershipType();
+    // userMembershipTypePatreon.value = ms;
+    // _updateGlobal(ms);
   }
 
   void signOutPatreon() {
-    NamicoSubscriptionManager.cacheManager.deletePatreonCache();
-    const ms = MembershipType.unknown;
-    userPatreonTier.value = null;
-    userMembershipTypePatreon.value = ms;
-    _updateGlobal(ms);
+    // NamicoSubscriptionManager.cacheManager.deletePatreonCache();
+    // const ms = MembershipType.unknown;
+    // userPatreonTier.value = null;
+    // userMembershipTypePatreon.value = ms;
+    // _updateGlobal(ms);
   }
 
   Future<void> checkSupabase(String code, String email) async {
-    final deviceId = await NamidaDeviceInfo.fetchDeviceId();
-    final sub = await NamicoSubscriptionManager.supabase.fetchUserValid(
-      uuid: code,
-      email: email,
-      deviceId: deviceId,
-    );
-    userSupabaseSub.value = sub;
-    final ms = sub.toMembershipType();
-    userMembershipTypeSupabase.value = ms;
-    _updateGlobal(ms);
+    // final deviceId = await NamidaDeviceInfo.fetchDeviceId();
+    // final sub = await NamicoSubscriptionManager.supabase.fetchUserValid(
+    //   uuid: code,
+    //   email: email,
+    //   deviceId: deviceId,
+    // );
+    // userSupabaseSub.value = sub;
+    // final ms = sub.toMembershipType();
+    // userMembershipTypeSupabase.value = ms;
+    // _updateGlobal(ms);
   }
 
   Future<void> claimSupabase(String code, String email) async {
-    final deviceId = await NamidaDeviceInfo.fetchDeviceId();
-    final sub = await NamicoSubscriptionManager.supabase.claimSubscription(
-      uuid: code,
-      email: email,
-      deviceId: deviceId,
-    );
-    userSupabaseSub.value = sub;
-    final ms = sub.toMembershipType();
-    userMembershipTypeSupabase.value = ms;
-    _updateGlobal(ms);
+  //   final deviceId = await NamidaDeviceInfo.fetchDeviceId();
+  //   final sub = await NamicoSubscriptionManager.supabase.claimSubscription(
+  //     uuid: code,
+  //     email: email,
+  //     deviceId: deviceId,
+  //   );
+  //   userSupabaseSub.value = sub;
+  //   final ms = sub.toMembershipType();
+  //   userMembershipTypeSupabase.value = ms;
+  //   _updateGlobal(ms);
   }
 }
